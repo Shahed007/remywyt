@@ -21,11 +21,11 @@ export function JobCard({ job }: JobCardProps) {
     >
       <div className="flex-1 flex items-center gap-4">
         <div className="size-[56px] rounded-full bg-gray-100 flex items-center justify-center text-base font-bold">
-          {job.company.code}
+          {job?.company?.code}
         </div>
         <div className="flex  flex-col">
-          <h2 className="text-[#1C1917] text-lg font-bold">{job.title}</h2>
-          <p className="mt-1 text-sm text-[#494745]">{job.location}</p>
+          <h2 className="text-[#1C1917] text-lg font-bold">{job?.title}</h2>
+          <p className="mt-1 text-sm text-[#494745]">{job?.location}</p>
         </div>
       </div>
       <div className="flex-1 flex items-center justify-between">

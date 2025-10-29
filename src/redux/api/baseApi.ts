@@ -10,9 +10,9 @@ import { logout, setAccessToken } from "../features/auth";
 
 const baseQuery = fetchBaseQuery({
   // baseUrl: "https://pamelam.code-commando.com/api",
-  baseUrl: process.env.NEXT_PUBLIC_PUBLIC_API_URL || "",
+  // baseUrl: "https://htc-client-nine.vercel.app/api",
   // baseUrl: "https://arcroofs.com/api/v1",
-  // baseUrl: "http://localhost:3000/api",
+  baseUrl: "http://localhost:3000/api",
   // prepareHeaders: (headers, { getState }) => {
   //   const token = (getState() as RootState).auth?.accessToken;
   //   if (token) {
