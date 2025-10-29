@@ -91,7 +91,7 @@ export function VacancyCard({ vacancy }: { vacancy: VacancyProps }) {
   const [imgSrc, setImgSrc] = useState(vacancy.image || fallbackImage);
 
   return (
-    <div className="w-[350px] h-[320px] mx-auto">
+    <div className=" h-[320px] ">
       <Link
         href={"/vacancies/" + vacancy.id}
         className="group relative block h-full w-full overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/60 hover:shadow-md transition-shadow duration-300"
@@ -235,7 +235,7 @@ export default function Vacancies() {
             >
               {vacancies?.map((v: any) => (
                 <SwiperSlide key={v.id}>
-                  <div className="flex justify-center mb-10">
+                  <div className=" mb-10">
                     <VacancyCard vacancy={transformVacancy(v)} />
                   </div>
                 </SwiperSlide>

@@ -1,48 +1,54 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import jacobApi from "@/utils/jacobApi";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function GET(request: Request): Promise<NextResponse> {
   try {
+    // ✅ Parse query params safely
     const { searchParams } = new URL(request.url);
-    const request_id = searchParams.get("request_id");
 
-    if (!request_id) {
-      return NextResponse.json(
-        { message: "Missing request_id in query params" },
-        { status: 400 }
-      );
-    }
+    const query: Record<string, any> = {};
 
-    const formData = await request.formData();
-    const file = formData.get("file") as Blob;
+    const page = searchParams.get("page");
+    if (page) query.page = Number(page);
 
-    if (!file) {
-      return NextResponse.json(
-        { message: "Missing file in form data" },
-        { status: 400 }
-      );
-    }
+    const take = searchParams.get("take");
+    if (take) query.take = Number(take);
 
-    // Prepare FormData for Jacob API
-    const jacobForm = new FormData();
-    jacobForm.append("file", file);
+    const clientId = searchParams.get("clientId");
+    if (clientId) query.clientId = clientId;
 
-    // Send file to Jacob API
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_JACOB_API_URL}/file/resume?request_id=${request_id}`,
-      {
-        method: "POST",
-        headers: {
-          "x-api-key": process.env.NEXT_PUBLIC_JACOB_API_KEY || "",
-          "x-language": "en",
-        },
-        body: jacobForm,
-      }
-    );
+    const searchQuery = searchParams.get("query");
+    if (searchQuery) query.query = searchQuery;
 
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (err) {
-    console.error("Upload Error:", err);
+    const city = searchParams.get("city");
+    if (city) query.city = city;
+
+    const onlyRemote = searchParams.get("onlyRemote");
+    if (onlyRemote !== null) query.onlyRemote = onlyRemote === "true";
+
+    // ✅ Parse array query params
+    const jobCategory = searchParams.getAll("jobCategory");
+    if (jobCategory.length) query.jobCategory = jobCategory;
+
+    const industryIds = searchParams.getAll("industryIds");
+    if (industryIds.length) query.industryIds = industryIds;
+
+    const seniorityIds = searchParams.getAll("seniorityIds");
+    if (seniorityIds.length) query.seniorityIds = seniorityIds;
+
+    const educationLevelIds = searchParams.getAll("educationLevelIds");
+    if (educationLevelIds.length) query.educationLevelIds = educationLevelIds;
+
+    // ✅ Call the Jacob API
+    const result = await jacobApi("/vacancies/public", {
+      method: "GET",
+      query,
+    });
+
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("GET /vacancies/public error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
